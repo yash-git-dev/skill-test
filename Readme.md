@@ -8,6 +8,7 @@ A comprehensive full-stack web application for managing school operations includ
 skill-test/
 ├── frontend/           # React + TypeScript + Material-UI
 ├── backend/            # Node.js + Express + PostgreSQL
+├── go-service/         # Golang microservice for PDF reports
 ├── seed_db/           # Database schema and seed data
 └── README.md          # This file
 ```
@@ -76,6 +77,30 @@ psql -d school_mgmt -f seed_db/seed-db.sql
   - Integrate Web3 wallet connection in frontend
   - Add certificate management in admin panel
   - Implement IPFS for certificate metadata storage
+
+### **Problem 4: Golang Developer Challenge**
+**Build PDF Report Generation Microservice via API Integration**
+- **Objective**: Create a standalone microservice in Go to generate PDF reports for students by consuming the existing Node.js backend API.
+- **Location**: A new `go-service/` directory at the root of the project.
+- **Description**: This service will connect to the existing Node.js backend's `/api/v1/students/:id` endpoint to fetch student data, and then use the returned JSON to generate a downloadable PDF report.
+- **Skills Tested**: Golang, REST API consumption, JSON parsing, file generation, microservice integration.
+- **Requirements**:
+  - Create a new endpoint `GET /api/v1/students/:id/report` in the Go service.
+  - The Go service must not connect directly to the database; it must fetch data from the Node.js API.
+  - The developer **must** have the PostgreSQL database and the Node.js backend running to complete this task.
+
+### **Problem 5: DevOps Engineer Challenge**
+**Containerize the Full Application Stack**
+- **Objective**: Create a multi-container setup to run the entire application stack (Frontend, Backend, Database) using Docker and Docker Compose.
+- **Location**: `Dockerfile` in the `frontend` and `backend` directories, and a `docker-compose.yml` file at the project root.
+- **Description**: The goal is to make the entire development environment reproducible and easy to launch with a single command. The candidate must ensure all services can communicate with each other inside the Docker network.
+- **Skills Tested**: Docker, Docker Compose, container networking, database seeding in a container, environment variable management.
+- **Requirements**:
+  - Write a `Dockerfile` for the `frontend` service.
+  - Write a `Dockerfile` for the `backend` service.
+  - Create a `docker-compose.yml` at the root to define and link the `frontend`, `backend`, and `postgres` services.
+  - The `postgres` service must be automatically seeded with the data from the `seed_db/` directory on its first run.
+  - The entire application should be launchable with `docker-compose up`.
 
 ## 🛠️ Technology Stack
 
@@ -180,6 +205,21 @@ backend/src/
 3. Integrate Web3 wallet connection
 4. Test certificate issuance and verification flow
 
+### For Golang Developers
+1. Set up the PostgreSQL database using `seed_db/` files.
+2. Set up and run the Node.js backend by following its setup instructions.
+3. Run the Go service.
+4. Use a tool like `curl` or Postman to make a GET request to the Go service's `/api/v1/students/:id/report` endpoint.
+5. Verify that the Go service correctly calls the Node.js backend and that a PDF file is successfully generated.
+6. Check the contents of the PDF for correctness.
+
+### For DevOps Engineers
+1. Ensure Docker and Docker Compose are installed on your machine.
+2. From the project root, run the command `docker-compose up --build`.
+3. Wait for all services to build and start.
+4. Access the frontend at `http://localhost:5173` and verify the application is running.
+5. Log in with the demo credentials to confirm that the frontend, backend, and database are all communicating correctly.
+
 ## 📚 API Documentation
 
 ### Authentication Endpoints
@@ -198,6 +238,9 @@ backend/src/
 - `POST /api/v1/notices` - Create notice
 - `PUT /api/v1/notices/:id` - Update notice
 - `DELETE /api/v1/notices/:id` - Delete notice
+
+### PDF Generation Service (Go)
+- `GET /api/v1/students/:id/report` - Generate and download a PDF report for a specific student.
 
 ## 🤝 Contributing
 
